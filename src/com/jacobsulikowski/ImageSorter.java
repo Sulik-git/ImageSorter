@@ -3,6 +3,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import com.jacobsulikowski.Image;
 
 public class ImageSorter {
 
@@ -12,17 +13,24 @@ public class ImageSorter {
 
     public static void main(String[] args){
         List<File> lista = new ArrayList<File>();
-        File file = new File("D:\\REPO\\Img_Sorter\\test_folder");
+        List<Image> images = new ArrayList<Image>();
+        File file = new File("E:\\REPO\\ImageSorter\\test_folder");
         String name;
-
-        File[] files= file.listFiles();
-
+        File[] files;
 
 
+        if(file.listFiles() == null){
+            System.out.println("No files found");
+        }
+        else {
+            files = file.listFiles();
             lista.addAll(Arrays.asList(files));
+        }
 
-            for (File f : lista
-                 ) {
+
+
+
+            for (File f : lista) {
                 List<Character> listC = new ArrayList<>();
                 List<Character> listYear;
                 List<Character> listMonth;
@@ -35,10 +43,9 @@ public class ImageSorter {
                 }
 
                 listC.subList(8,14).clear();
-
-
                 listYear = listC.subList(0,4);
                 listMonth = listC.subList(4,6);
+
 
                 StringBuilder sb = new StringBuilder();
                 for (Character c : listYear) {
@@ -55,9 +62,12 @@ public class ImageSorter {
 
 
                 ArrayList<Character> arrayList = new ArrayList<Character>();
-
-                System.out.println(ms);
+                images.add(new Image(f,ys,ms)); //Dodanie do listy zdjęć nowego zdjęcia
+                //System.out.println(ys);
+                //System.out.println(ms);
             }
+            
+
 
 
     }
