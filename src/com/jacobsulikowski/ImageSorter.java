@@ -17,7 +17,16 @@ public class ImageSorter {
         File file = new File("E:\\REPO\\ImageSorter\\test_folder");
         String name;
         File[] files;
+        boolean isDirCreated = file.mkdir();
+        try {
 
+            if(!isDirCreated)
+            {
+                throw new Exception("Failed to create directory");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         if(file.listFiles() == null){
             System.out.println("No files found");
