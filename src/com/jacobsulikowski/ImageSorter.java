@@ -61,7 +61,7 @@ public class ImageSorter {
 
 
                     ArrayList<Character> arrayList = new ArrayList<Character>();
-                    images.add(new Image(file,f,ys,ms)); //Adding new image to imageslist
+                    images.add(new Image(file,f,name,ys,ms)); //Adding new image to imageslist
                     //System.out.println(ys);
                     //System.out.println(ms);
                 }
@@ -95,17 +95,12 @@ public class ImageSorter {
               File newName = new File(i.getFilePath().getPath());
 
               sb.append("\\");
-              System.out.println();
-              /*
-              sb.append(i.getYear());
-              sb.append('_');
-              sb.append(i.getMonth());
-              sb.append(".jpg");
+              sb.append(i.getImageName());
 
-               */
-              System.out.println(sb);
+
+              //System.out.println(sb);
               newName.renameTo(new File(sb.toString()));
-              System.out.println(i.getFilePath());
+              //System.out.println(i.getFilePath());
 
 
 
