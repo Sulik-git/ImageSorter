@@ -15,10 +15,8 @@ public class ImageSorter {
         List<File> lista = new ArrayList<File>();
         List<Image> images = new ArrayList<Image>();
         File file = new File("D:\\REPO\\ImgSorter\\test_folder");
-        File newDir = new File("D:\\REPO\\ImgSorter\\test_folder\\newDir");
         String name;
         File[] files;
-        boolean isDirCreated = newDir.mkdir();
 
         if(file.listFiles() == null){
             System.out.println("No files found");
@@ -63,7 +61,7 @@ public class ImageSorter {
 
 
                     ArrayList<Character> arrayList = new ArrayList<Character>();
-                    images.add(new Image(file,ys,ms)); //Adding new image to imageslist
+                    images.add(new Image(file,f,ys,ms)); //Adding new image to imageslist
                     //System.out.println(ys);
                     //System.out.println(ms);
                 }
@@ -71,26 +69,45 @@ public class ImageSorter {
             }
 
             for (Image i : images){
-              String path = i.getPath().getPath();
+              String path = i.getOriginFile().getPath();
               StringBuilder sb = new StringBuilder();
               sb.append(path);
               sb.append("\\");
               sb.append(i.getYear());
               boolean newDirectory = false;
-
-              for (File l : lista){
-                  if(l.getName().equals(sb.toString())){
-                      newDirectory = true;
-                  }else{
-                      newDirectory = false;
-                  }
-              }
-              if(!newDirectory){
+              boolean newDirMonth = false;
+              if(!lista.contains(new File(sb.toString())))
+              {
+                  //System.out.println(sb);
                   newDirectory = new File(sb.toString()).mkdir();
-              } else {
-                  System.out.println(sb);
-                  System.out.println("Directory already exists");
+                  lista.add(new File(sb.toString()));
               }
+              sb.append("\\");
+              sb.append(i.getMonth());
+              if(lista.contains(new File(sb.toString())))
+              {
+                  //System.out.println("Month already exists");
+              } else {
+                  newDirMonth = new File(sb.toString()).mkdir();
+                  lista.add(new File(sb.toString()));
+
+              }
+              File newName = new File(i.getFilePath().getPath());
+
+              sb.append("\\");
+              System.out.println();
+              /*
+              sb.append(i.getYear());
+              sb.append('_');
+              sb.append(i.getMonth());
+              sb.append(".jpg");
+
+               */
+              System.out.println(sb);
+              newName.renameTo(new File(sb.toString()));
+              System.out.println(i.getFilePath());
+
+
 
             }
 
