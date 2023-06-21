@@ -14,19 +14,11 @@ public class ImageSorter {
     public static void main(String[] args){
         List<File> lista = new ArrayList<File>();
         List<Image> images = new ArrayList<Image>();
-        File file = new File("E:\\REPO\\ImageSorter\\test_folder");
+        File file = new File("D:\\REPO\\ImgSorter\\test_folder");
+        File newDir = new File("D:\\REPO\\ImgSorter\\test_folder\\newDir");
         String name;
         File[] files;
-        boolean isDirCreated = file.mkdir();
-        try {
-
-            if(!isDirCreated)
-            {
-                throw new Exception("Failed to create directory");
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        boolean isDirCreated = newDir.mkdir();
 
         if(file.listFiles() == null){
             System.out.println("No files found");
@@ -36,46 +28,71 @@ public class ImageSorter {
             lista.addAll(Arrays.asList(files));
         }
 
-
-
-
             for (File f : lista) {
-                List<Character> listC = new ArrayList<>();
-                List<Character> listYear;
-                List<Character> listMonth;
                 name = f.getName();
+                //System.out.println(name);
                 char[] ch = name.toCharArray();
-                for (char c : ch){
-                    if(Character.isDigit(c)){
-                        listC.add(c);
+                if(name.contains("IMG"))
+                {
+                    List<Character> listC = new ArrayList<>();
+                    List<Character> listYear;
+                    List<Character> listMonth;
+                    for (char c : ch){
+                        if(Character.isDigit(c)){
+                            listC.add(c);
+                        }
                     }
+
+                    listC.subList(8,14).clear();
+                    listYear = listC.subList(0,4);
+                    listMonth = listC.subList(4,6);
+
+
+                    StringBuilder sb = new StringBuilder();
+                    for (Character c : listYear) {
+                        sb.append(c);
+                    }
+
+                    String ys = sb.toString();
+                    sb.delete(0,sb.length());
+
+                    for (Character c : listMonth) {
+                        sb.append(c);
+                    }
+                    String ms = sb.toString();
+
+
+                    ArrayList<Character> arrayList = new ArrayList<Character>();
+                    images.add(new Image(file,ys,ms)); //Adding new image to imageslist
+                    //System.out.println(ys);
+                    //System.out.println(ms);
                 }
 
-                listC.subList(8,14).clear();
-                listYear = listC.subList(0,4);
-                listMonth = listC.subList(4,6);
-
-
-                StringBuilder sb = new StringBuilder();
-                for (Character c : listYear) {
-                    sb.append(c);
-                }
-
-                String ys = sb.toString();
-                sb.delete(0,sb.length());
-
-                for (Character c : listMonth) {
-                    sb.append(c);
-                }
-                String ms = sb.toString();
-
-
-                ArrayList<Character> arrayList = new ArrayList<Character>();
-                images.add(new Image(f,ys,ms)); //Dodanie do listy zdjęć nowego zdjęcia
-                //System.out.println(ys);
-                //System.out.println(ms);
             }
-            
+
+            for (Image i : images){
+              String path = i.getPath().getPath();
+              StringBuilder sb = new StringBuilder();
+              sb.append(path);
+              sb.append("\\");
+              sb.append(i.getYear());
+              boolean newDirectory = false;
+
+              for (File l : lista){
+                  if(l.getName().equals(sb.toString())){
+                      newDirectory = true;
+                  }else{
+                      newDirectory = false;
+                  }
+              }
+              if(!newDirectory){
+                  newDirectory = new File(sb.toString()).mkdir();
+              } else {
+                  System.out.println(sb);
+                  System.out.println("Directory already exists");
+              }
+
+            }
 
 
 
