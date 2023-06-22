@@ -3,53 +3,39 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.jacobsulikowski.Image;
 
 public class ImageSorter {
+    private static List<File> lista = new ArrayList<File>();
+    private static List<Image> images = new ArrayList<Image>();
+    private static File workingDirFile = new File(System.getProperty("user.dir"));
+    private String name;
+    private int counter = 0;
 
+    public ImageSorter(){
 
+    }
 
-
-    //TODO: Zrobione wczytywanie nazwy, zrobione oddzielny String dla roku i miesiąca.
-
-    public static void main(String[] args){
-        List<File> lista = new ArrayList<File>();
-        List<Image> images = new ArrayList<Image>();
-        File file = new File(System.getProperty("user.dir"));
-        String name;
-        File[] files;
-        int counter = 0;
-
-
-        System.out.println();
-        if(file.listFiles() == null){
-            System.out.println("No files found");
-        }
-        else {
-            files = file.listFiles();
-            lista.addAll(Arrays.asList(files));
-
-        }
+    public void setImages(){
+        lista.addAll(Arrays.asList(workingDirFile.listFiles()));
 
         for (File f : lista) {
             name = f.getName();
             //System.out.println(name);
             char[] ch = name.toCharArray();
-            if(name.contains("IMG"))
-            {
+            if (name.contains("IMG")) {
                 counter++;
                 List<Character> listC = new ArrayList<>();
                 List<Character> listYear;
                 List<Character> listMonth;
-                for (char c : ch){
-                    if(Character.isDigit(c)){
+                for (char c : ch) {
+                    if (Character.isDigit(c)) {
                         listC.add(c);
                     }
                 }
 
-                listC.subList(8,14).clear();
-                listYear = listC.subList(0,4);
-                listMonth = listC.subList(4,6);
+                listC.subList(8, 14).clear();
+                listYear = listC.subList(0, 4);
+                listMonth = listC.subList(4, 6);
 
 
                 StringBuilder sb = new StringBuilder();
@@ -58,7 +44,7 @@ public class ImageSorter {
                 }
 
                 String ys = sb.toString();
-                sb.delete(0,sb.length());
+                sb.delete(0, sb.length());
 
                 for (Character c : listMonth) {
                     sb.append(c);
@@ -67,31 +53,27 @@ public class ImageSorter {
 
 
                 ArrayList<Character> arrayList = new ArrayList<Character>();
-                images.add(new Image(file,f,name,ys,ms)); //Adding new image to imageslist
+                images.add(new Image(workingDirFile, f, name, ys, ms)); //Adding new image to imageslist
                 //System.out.println(ys);
                 //System.out.println(ms);
             }
-
         }
-
-
-        if (counter == 0){
+        if(!areImagesFound()){
             System.out.println("No images found");
-            System.exit(0);
         }
+    }
 
+    public void createDirs(){
         for (Image i : images){
             String path = i.getOriginFile().getPath();
             StringBuilder sb = new StringBuilder();
             sb.append(path);
             sb.append("\\");
             sb.append(i.getYear());
-            boolean newDirectory = false;
-            boolean newDirMonth = false;
             if(!lista.contains(new File(sb.toString())))
             {
                 //System.out.println(sb);
-                newDirectory = new File(sb.toString()).mkdir();
+                new File(sb.toString()).mkdir();
                 lista.add(new File(sb.toString()));
             }
             sb.append("\\");
@@ -100,7 +82,7 @@ public class ImageSorter {
             {
                 //System.out.println("Month already exists");
             } else {
-                newDirMonth = new File(sb.toString()).mkdir();
+                new File(sb.toString()).mkdir();
                 lista.add(new File(sb.toString()));
 
             }
@@ -113,11 +95,26 @@ public class ImageSorter {
             //System.out.println(sb);
             newName.renameTo(new File(sb.toString()));
             //System.out.println(i.getFilePath());
-
-
-
         }
+    }
 
+
+
+    boolean areImagesFound(){
+        if(counter == 0){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    //TODO: Test app
+
+    public static void main(String[] args){
+        ImageSorter sorter = new ImageSorter();
+        sorter.setImages();
+        sorter.createDirs();
 
     }
 }
