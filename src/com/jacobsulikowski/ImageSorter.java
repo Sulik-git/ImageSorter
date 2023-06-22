@@ -3,6 +3,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class ImageSorter {
     private static List<File> lista = new ArrayList<File>();
@@ -10,14 +11,16 @@ public class ImageSorter {
     private static File workingDirFile = new File(System.getProperty("user.dir"));
     private String name;
     private int counter = 0;
+    Scanner scanner = new Scanner(System.in);
 
     public ImageSorter(){
 
     }
 
     public void setImages(){
+        System.out.println("Starting app...");
         lista.addAll(Arrays.asList(workingDirFile.listFiles()));
-
+        System.out.println("Reading files...");
         for (File f : lista) {
             name = f.getName();
             //System.out.println(name);
@@ -59,11 +62,15 @@ public class ImageSorter {
             }
         }
         if(!areImagesFound()){
-            System.out.println("No images found");
+            System.out.println("No images found!!!");
+            System.out.println("Press enter to exit");
+            scanner.nextLine();
+            System.exit(0);
         }
     }
 
     public void createDirs(){
+        System.out.println("Creating directories...");
         for (Image i : images){
             String path = i.getOriginFile().getPath();
             StringBuilder sb = new StringBuilder();
@@ -96,6 +103,8 @@ public class ImageSorter {
             newName.renameTo(new File(sb.toString()));
             //System.out.println(i.getFilePath());
         }
+        System.out.println("Press enter to exit");
+        scanner.nextLine();
     }
 
 
@@ -109,12 +118,7 @@ public class ImageSorter {
     }
 
 
-    //TODO: Test app
 
-    public static void main(String[] args){
-        ImageSorter sorter = new ImageSorter();
-        sorter.setImages();
-        sorter.createDirs();
 
-    }
+
 }
