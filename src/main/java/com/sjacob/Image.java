@@ -1,4 +1,4 @@
-package com.jacobsulikowski;
+package com.sjacob;
 
 import java.io.File;
 
